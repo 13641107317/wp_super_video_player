@@ -1,5 +1,6 @@
 package com.example.wp.wp_super_video_player;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -7,13 +8,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.wp.wp_super_video_player.api.Router;
 import com.example.wp.wp_super_video_player.fragment.FragmentManagerWrapper;
 
@@ -85,7 +84,7 @@ public class HomeActivity extends BaseActivity {
                 }
                 mMenuItem = item;
                 mDrawerLayout.closeDrawer(Gravity.LEFT);
-               item.setChecked(true);
+                item.setChecked(true);
                 return false;
             }
         });
@@ -94,9 +93,13 @@ public class HomeActivity extends BaseActivity {
     private void switchFragment(Class<?> clazz) {
         Fragment fragment = FragmentManagerWrapper.getInstance().createFragment(clazz);
         if (fragment.isAdded()) {
-            mFragmentManager.beginTransaction().hide(mCurrentFragment).show(fragment);
+            mFragmentManager.beginTransaction()
+                    .hide(mCurrentFragment)
+                    .show(fragment).commitAllowingStateLoss();
         } else {
-            mFragmentManager.beginTransaction().hide(mCurrentFragment).commitAllowingStateLoss();
+            mFragmentManager.beginTransaction().hide(mCurrentFragment)
+                    .add(R.id.fl_home_content, fragment)
+                    .commitAllowingStateLoss();
         }
         mCurrentFragment = fragment;
     }
