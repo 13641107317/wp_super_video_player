@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Created by wangpeng .
@@ -14,12 +15,13 @@ import butterknife.ButterKnife;
 public abstract class BaseActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
+    private Unbinder mUnbinder;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(setLayoutId());
-
-        ButterKnife.bind(this);
+        mUnbinder = ButterKnife.bind(this);
         initView();
         initData(savedInstanceState);
     }
@@ -41,4 +43,12 @@ public abstract class BaseActivity extends AppCompatActivity {
     public abstract void initView();
 
     public abstract void initData(@Nullable Bundle savedInstanceState);
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mUnbinder != null) {
+            mUnbinder.unbind();
+        }
+    }
 }
