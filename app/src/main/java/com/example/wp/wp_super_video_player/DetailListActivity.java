@@ -1,15 +1,14 @@
 package com.example.wp.wp_super_video_player;
 
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
+import android.view.MenuItem;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.wp.wp_super_video_player.adapter.SitePagerAdapter;
 import com.example.wp.wp_super_video_player.api.Router;
 import com.example.wp.wp_super_video_player.entity.Channel;
 
@@ -31,18 +30,22 @@ public class DetailListActivity extends BaseActivity {
     @Override
     public void initView() {
         ARouter.getInstance().inject(this);
-        setSupportActionBar();
-        setActionBarIcon(R.drawable.titlebar_return_white);
-        if (channel != null){
-            setTitle(channel.getChannelName());
+        if (channel == null){
+            new RuntimeException("channel is null!");
         }
-        mToolbar.setClickable(true);
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        setSupportActionBar();
+        setSupportArrowActionBar(true);
+        setTitle(channel.getChannelName());
+
+        mViewPager.setAdapter(new SitePagerAdapter(getSupportFragmentManager(),getApplicationContext(),channel.getChannelId()));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home){
+            finish();
+        }
+        return true;
     }
 
     @Override
