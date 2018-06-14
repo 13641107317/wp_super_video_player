@@ -16,7 +16,6 @@ import butterknife.BindView;
 /**
  * Created by wangpeng .
  */
-@Route(path = Router.ABOUT_FRAGMENT)
 public class AboutFragment extends BaseFragment {
     @BindView(R.id.app_desc)
     TextView mTextView;

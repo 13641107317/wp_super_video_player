@@ -3,6 +3,8 @@
     package="com.example.wp.wp_super_video_player">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -19,7 +21,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".HomeActivity" />
-        <activity android:name=".GuideActivity"></activity>
+        <activity android:name=".GuideActivity" />
+        <activity android:name=".FavoriteActivity" />
+        <activity android:name=".HistoryActivity" />
+        <activity android:name=".DetailListActivity"
+            android:launchMode="singleTop"></activity>
     </application>
 
 </manifest>
