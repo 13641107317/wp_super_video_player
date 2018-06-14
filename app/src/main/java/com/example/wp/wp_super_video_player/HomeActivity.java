@@ -9,8 +9,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.example.wp.wp_super_video_player.api.Router;
@@ -31,6 +33,8 @@ public class HomeActivity extends BaseActivity {
     private MenuItem mMenuItem;
     private FragmentManager mFragmentManager;
     private Fragment mCurrentFragment;
+
+    private long clickTime = 0;
 
     @Override
     public int setLayoutId() {
@@ -109,4 +113,27 @@ public class HomeActivity extends BaseActivity {
 
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            exit();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+
+    }
+
+    /**
+     * back键2秒退出
+     */
+    private void exit() {
+        if ((System.currentTimeMillis() - clickTime) > 2000) {
+            Toast.makeText(getApplicationContext(), "再按一次后退键退出程序",
+                    Toast.LENGTH_SHORT).show();
+            clickTime = System.currentTimeMillis();
+        } else {
+            this.finish();
+            //     System.exit(0);
+        }
+    }
 }
