@@ -26,7 +26,7 @@ public class SitePagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        Fragment fragment = new DetailListFragment(1,channelId);
+        Fragment fragment = DetailListFragment.newInstance(1,channelId);
 
         return fragment;
     }

@@ -11,19 +11,18 @@ import com.example.wp.wp_super_video_player.base.BaseFragment;
 /**
  * Created by WangPeng on 2018/6/14.
  */
-@SuppressLint("ValidFragment")
-public class DetailListFragment extends BaseFragment {
-    private int mSiteId;
-    private int mChannelId;
 
-    @SuppressLint("ValidFragment")
-    public DetailListFragment(int siteId, int channelId) {
-        this.mChannelId = channelId;
-        this.mSiteId = siteId;
-    }
+public class DetailListFragment extends BaseFragment {
+    private static final String CHANNEL_ID = "channelId";
+    private static final String SITE_ID = "siteId";
+
 
     public static DetailListFragment newInstance(int siteId, int channelId) {
-        DetailListFragment fragment = new DetailListFragment(siteId, channelId);
+        DetailListFragment fragment = new DetailListFragment();
+        Bundle args = new Bundle();
+        args.putInt(CHANNEL_ID,channelId);
+        args.putInt(SITE_ID,siteId);
+        fragment.setArguments(args);
         return fragment;
     }
 
