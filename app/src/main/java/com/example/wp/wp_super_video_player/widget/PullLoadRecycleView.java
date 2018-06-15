@@ -29,20 +29,24 @@ public class PullLoadRecycleView extends LinearLayout {
     private boolean isRefresh = false;//是否刷新
     private boolean isLoadMore = false;//是否加载更多
 
+    private IRecycleViewRefreshOrLoad mRefreshOrLoad;
     private AnimationDrawable mAnimationDrawable;
-    public PullLoadRecycleView(Context context) {
+
+    public PullLoadRecycleView(Context context, IRecycleViewRefreshOrLoad refreshOrLoad) {
         super(context);
+        this.mRefreshOrLoad = refreshOrLoad;
         initView(context);
     }
-
-
-    public PullLoadRecycleView(Context context, @Nullable AttributeSet attrs) {
+    
+    public PullLoadRecycleView(Context context, @Nullable AttributeSet attrs, IRecycleViewRefreshOrLoad refreshOrLoad) {
         super(context, attrs);
+        this.mRefreshOrLoad = refreshOrLoad;
         initView(context);
     }
 
-    public PullLoadRecycleView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public PullLoadRecycleView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, IRecycleViewRefreshOrLoad refreshOrLoad) {
         super(context, attrs, defStyleAttr);
+        this.mRefreshOrLoad = refreshOrLoad;
         initView(context);
     }
 
@@ -61,17 +65,20 @@ public class PullLoadRecycleView extends LinearLayout {
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         //滚动条隐藏
         mRecyclerView.setScrollbarFadingEnabled(true);
+
+        mRecyclerView.addOnScrollListener(new MyRecycleViewOnScroll(mSwipeLayout, isLoadMore, mRefreshOrLoad));
         mRecyclerView.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 return isLoadMore || isRefresh;
             }
         });
-
+        //加载更多图片
         ImageView img = mFooter.findViewById(R.id.load_img);
+        //loadMore文字
         TextView tv = mFooter.findViewById(R.id.load_tv);
-        img.setBackgroundResource(R.drawable.imooc_loading);
         //加载更多的动画
+        img.setBackgroundResource(R.drawable.imooc_loading);
         mAnimationDrawable = (AnimationDrawable) img.getDrawable();
 
         mFooter.setVisibility(GONE);
@@ -83,12 +90,9 @@ public class PullLoadRecycleView extends LinearLayout {
         @Override
         public void onRefresh() {
             if (!isRefresh) {
-                refreshData();
+                mRefreshOrLoad.onRefresh();
             }
         }
     }
 
-    private void refreshData() {
-
-    }
 }
