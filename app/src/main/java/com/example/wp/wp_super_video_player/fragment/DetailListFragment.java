@@ -7,15 +7,20 @@ import android.view.View;
 
 import com.example.wp.wp_super_video_player.R;
 import com.example.wp.wp_super_video_player.base.BaseFragment;
+import com.example.wp.wp_super_video_player.widget.IRecycleViewRefreshOrLoad;
+import com.example.wp.wp_super_video_player.widget.PullLoadRecycleView;
+
+import butterknife.BindView;
 
 /**
  * Created by WangPeng on 2018/6/14.
  */
 
-public class DetailListFragment extends BaseFragment {
+public class DetailListFragment extends BaseFragment implements IRecycleViewRefreshOrLoad{
     private static final String CHANNEL_ID = "channelId";
     private static final String SITE_ID = "siteId";
-
+    @BindView(R.id.rv_fragment_detail)
+    PullLoadRecycleView mRecycleView;
 
     public static DetailListFragment newInstance(int siteId, int channelId) {
         DetailListFragment fragment = new DetailListFragment();
@@ -33,6 +38,17 @@ public class DetailListFragment extends BaseFragment {
 
     @Override
     protected void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
+            mRecycleView.setGridLayout(3);
+            mRecycleView.setRecycleViewRefreshOrLoadListener(this);
+    }
+
+    @Override
+    public void loadMore() {
+
+    }
+
+    @Override
+    public void onRefresh() {
 
     }
 }
