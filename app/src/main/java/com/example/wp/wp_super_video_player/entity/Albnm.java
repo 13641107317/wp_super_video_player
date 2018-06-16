@@ -3,6 +3,8 @@ package com.example.wp.wp_super_video_player.entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.wp.wp_super_video_player.App;
+
 /**
  * Created by WangPeng on 2018/6/16.
  */
@@ -196,5 +198,13 @@ public class Albnm implements Parcelable {
         parcel.writeString(tip);
         parcel.writeByte((byte) (isComplected ? 1 : 0));
         parcel.writeString(letvStyle);
+    }
+    public String toJson(){
+        String res = App.getGson().toJson(this);
+        return res;
+    }
+    public Albnm fromJson(String json){
+        Albnm albnm = App.getGson().fromJson(json,Albnm.class);
+        return albnm;
     }
 }
