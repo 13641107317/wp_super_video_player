@@ -4,12 +4,18 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.example.wp.wp_super_video_player.R;
 import com.example.wp.wp_super_video_player.adapter.DetailAdapter;
+import com.example.wp.wp_super_video_player.api.OnGetChannelAlunmListener;
+import com.example.wp.wp_super_video_player.api.SiteApi;
 import com.example.wp.wp_super_video_player.base.BaseFragment;
+import com.example.wp.wp_super_video_player.entity.Albnm;
+import com.example.wp.wp_super_video_player.entity.AlbumList;
+import com.example.wp.wp_super_video_player.entity.ErrorInfo;
 import com.example.wp.wp_super_video_player.entity.Site;
 import com.example.wp.wp_super_video_player.widget.IRecycleViewRefreshOrLoad;
 import com.example.wp.wp_super_video_player.widget.PullLoadRecycleView;
@@ -21,6 +27,7 @@ import butterknife.BindView;
  */
 
 public class DetailListFragment extends BaseFragment implements IRecycleViewRefreshOrLoad {
+    private static final String TAG = DetailListFragment.class.getSimpleName();
     private static final String CHANNEL_ID = "channelId";
     private static final String SITE_ID = "siteId";
     private static final int REFRESH_TIME = 1500;
@@ -34,6 +41,9 @@ public class DetailListFragment extends BaseFragment implements IRecycleViewRefr
     private int mColunms;
     private DetailAdapter adapter;
     private static Handler mHandler = new Handler(Looper.getMainLooper());
+
+    private int pagerNo;
+    private int pagerSize = 30;
 
     public static DetailListFragment newInstance(int siteId, int channelId) {
         DetailListFragment fragment = new DetailListFragment();
@@ -52,7 +62,10 @@ public class DetailListFragment extends BaseFragment implements IRecycleViewRefr
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mSiteId = getArguments().getInt(SITE_ID);
+        mChannelId = getArguments().getInt(CHANNEL_ID);
         adapter = new DetailAdapter(getActivity());
+        loadData();
         if (mSiteId == Site.LETV) {
             mColunms = 2;
             adapter.setColunms(mColunms);
@@ -64,6 +77,7 @@ public class DetailListFragment extends BaseFragment implements IRecycleViewRefr
         mRecycleView.setGridLayout(3);
         mRecycleView.setAdapter(adapter);
         mRecycleView.setRecycleViewRefreshOrLoadListener(this);
+
     }
 
     @Override
@@ -87,14 +101,28 @@ public class DetailListFragment extends BaseFragment implements IRecycleViewRefr
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-
-               loadData();
+                loadData();
                 mRecycleView.setLoadMoreCompleted();
             }
         }, LOADMORE_TIME);
     }
 
     private void loadData() {
+        pagerNo++;
+        SiteApi.onGetChannelAlums(getActivity(), pagerNo, pagerSize, mSiteId, mChannelId, new OnGetChannelAlunmListener() {
+            @Override
+            public void onGetChannelAlunmsSuccess(AlbumList albnms) {
+                Log.i(TAG, "onGetChannelAlunmsSuccess: "+albnms.size());
+                for (Albnm albnms1 : albnms) {
+                    Log.i(TAG, "onGetChannelAlunmsSuccess: " + albnms1.toString());
 
+                }
+            }
+
+            @Override
+            public void onGetChannelAlunmsFailed(ErrorInfo errorInfo) {
+
+            }
+        });
     }
 }

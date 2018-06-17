@@ -3,6 +3,7 @@ package com.example.wp.wp_super_video_player;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
@@ -33,6 +34,7 @@ public class DetailListActivity extends BaseActivity {
         if (channel == null){
             new RuntimeException("channel is null!");
         }
+        Log.i(TAG, "initView: "+channel.getChannelName());
         setSupportActionBar();
         setSupportArrowActionBar(true);
         setTitle(channel.getChannelName());

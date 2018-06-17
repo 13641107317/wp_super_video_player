@@ -9,7 +9,7 @@ import com.example.wp.wp_super_video_player.entity.Site;
  * Created by WangPeng on 2018/6/15.
  */
 public class SiteApi {
-    public void onGetChannelAlums(Context context, int pagerNo, int pagerSize, int sideId,
+    public static void onGetChannelAlums(Context context, int pagerNo, int pagerSize, int sideId,
                                   int channelId, OnGetChannelAlunmListener listener) {
         switch (sideId) {
             case Site.LETV:

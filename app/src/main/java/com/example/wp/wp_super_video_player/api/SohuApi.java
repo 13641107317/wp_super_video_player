@@ -1,6 +1,13 @@
 package com.example.wp.wp_super_video_player.api;
 
+import com.example.wp.wp_super_video_player.App;
+import com.example.wp.wp_super_video_player.entity.Albnm;
+import com.example.wp.wp_super_video_player.entity.AlbumList;
 import com.example.wp.wp_super_video_player.entity.Channel;
+import com.example.wp.wp_super_video_player.entity.ErrorInfo;
+import com.example.wp.wp_super_video_player.entity.Site;
+import com.example.wp.wp_super_video_player.entity.sohu.Request;
+import com.example.wp.wp_super_video_player.entity.sohu.ResultAlbum;
 import com.example.wp.wp_super_video_player.utils.OkHttpUtils;
 
 import java.io.IOException;
@@ -42,21 +49,76 @@ public class SohuApi extends BaseSiteApi {
                             OnGetChannelAlunmListener listener) {
 
         String url = getChannelAlbumUrl(channel, pagerNo, pagerSize);
-        doGetChannelAlbumByUrl(url,listener);
+        doGetChannelAlbumByUrl(url, listener);
     }
 
-    private void doGetChannelAlbumByUrl(String url, OnGetChannelAlunmListener listener) {
+    private void doGetChannelAlbumByUrl(final String url, final OnGetChannelAlunmListener listener) {
         OkHttpUtils.excute(url, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
 
+                if (listener != null) {
+                    ErrorInfo info = buildErrorInfo(url, "doGetChannelAlbumByUrl",
+                            e, ErrorInfo.ERROR_TYPE_URL);
+                    listener.onGetChannelAlunmsFailed(info);
+                }
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful() && listener != null) {
+                    ErrorInfo info = buildErrorInfo(url, "doGetChannelAlbumByUrl",
+                            null, ErrorInfo.ERROR_TYPE_HTTP);
+                    listener.onGetChannelAlunmsFailed(info);
+                    return;
+                }
+                //取到数据映射model
+                Request result = App.getGson().fromJson(response.body().string(), Request.class);
+                AlbumList albnms = toConvertAlbumList(result);
+                if (albnms != null && albnms.size() > 0 && listener != null) {
 
+                    listener.onGetChannelAlunmsSuccess(albnms);
+                } else {
+                    ErrorInfo info = buildErrorInfo(url, "doGetChannelAlbumByUrl",
+                            null, ErrorInfo.ERROR_TYPE_DATA_CONVERT);
+                    listener.onGetChannelAlunmsFailed(info);
+                }
             }
         });
+    }
+
+    private AlbumList toConvertAlbumList(Request request) {
+        AlbumList list = null;
+        if (request.getData().getResultAlbumList().size() > 0) {
+            list = new AlbumList();
+            for (ResultAlbum resultAlbum : request.getData().getResultAlbumList()) {
+                Albnm albnm = new Albnm(Site.SOHU);
+                albnm.setAlbumDesc(resultAlbum.getTvDesc());
+                albnm.setAlbumId(resultAlbum.getAlbumId());
+                albnm.setHorImgUrl(resultAlbum.getHorHighPic());
+                albnm.setDirector(resultAlbum.getDirector());
+                albnm.setMainActor(resultAlbum.getMainActor());
+                albnm.setTip(resultAlbum.getTip());
+                albnm.setTitle(resultAlbum.getAlbumName());
+                albnm.setVerImgUrl(resultAlbum.getVerHighPic());
+
+                list.add(albnm);
+            }
+            return list;
+        }
+        return null;
+    }
+
+    private ErrorInfo buildErrorInfo(String url, String functionName, Exception e,
+                                     int type) {
+        ErrorInfo errorInfo = new ErrorInfo(Site.SOHU, type);
+        errorInfo.setFunctionName(functionName);
+        errorInfo.setType(type);
+        errorInfo.setUrl(url);
+        errorInfo.setClassName(TAG);
+        errorInfo.setTag(TAG);
+        errorInfo.setExceptionString(e.getMessage());
+        return errorInfo;
     }
 
     private String getChannelAlbumUrl(Channel channel, int pagerNo, int pagerSize) {
@@ -67,7 +129,7 @@ public class SohuApi extends BaseSiteApi {
 
     private int toConvertChannelId(Channel channel) {
         int channelId = -1;
-        switch (channel.getChannelId()){
+        switch (channel.getChannelId()) {
             case Channel.SHOW:
                 channelId = SOHU_CHANNELID_SERIES;
                 break;

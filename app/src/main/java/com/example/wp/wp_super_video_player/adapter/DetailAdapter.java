@@ -26,9 +26,11 @@ public class DetailAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
     }
-public void setColunms(int colunms){
 
-}
+    public void setColunms(int colunms) {
+
+    }
+
     @Override
     public int getItemCount() {
         return 0;

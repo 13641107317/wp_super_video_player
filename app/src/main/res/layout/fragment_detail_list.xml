@@ -1,13 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:gravity="center"
-    android:layout_height="match_parent">
-<TextView
-    android:id="@+id/tv_failed"
-    android:layout_width="wrap_content"
-    android:text="@string/data_failed_tip"
-    android:textSize="@dimen/dimen_32sp"
-    android:layout_height="wrap_content" />
+    android:orientation="vertical">
+
+    <com.example.wp.wp_super_video_player.widget.PullLoadRecycleView
+        android:id="@+id/rv_fragment_detail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:padding="@dimen/dimen_4dp"
+        android:scrollbars="none">
+
+    </com.example.wp.wp_super_video_player.widget.PullLoadRecycleView>
+
+    <TextView
+        android:id="@+id/tv_failed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/data_failed_tip"
+        android:textSize="@dimen/dimen_32sp" />
 </LinearLayout>

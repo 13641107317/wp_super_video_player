@@ -21,16 +21,14 @@ public abstract class BaseFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (setLayout() instanceof Integer) {
-            rootView = inflater.inflate((int) setLayout(), container, false);
-        } else if (setLayout() instanceof View) {
-            rootView = (View) setLayout();
-        } else {
-            throw new ClassCastException("type of setLayout() must be int or View!");
-        }
-        mUnbinder = ButterKnife.bind(this, rootView);
-        onBindView(savedInstanceState, rootView);
-        return rootView;
+       if (rootView == null){
+           rootView = inflater.inflate((int) setLayout(),container,false);
+           mUnbinder = ButterKnife.bind(this, rootView);
+           onBindView(savedInstanceState, rootView);
+           return rootView;
+       }
+       return null;
+
     }
 
     protected abstract Object setLayout();

@@ -12,6 +12,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -81,7 +82,7 @@ public class PullLoadRecycleView extends LinearLayout {
         TextView tv = mFooter.findViewById(R.id.load_tv);
         //加载更多的动画
         img.setBackgroundResource(R.drawable.imooc_loading);
-        mAnimationDrawable = (AnimationDrawable) img.getDrawable();
+        mAnimationDrawable = (AnimationDrawable) img.getBackground();
 
         mFooter.setVisibility(GONE);
         //包含swipeRefreshLayout,recycleView,footerView
@@ -145,16 +146,15 @@ public class PullLoadRecycleView extends LinearLayout {
     }
 
     class MyRecycleViewOnScroll extends RecyclerView.OnScrollListener {
-        private int firstItem = 0;
-        private int lastItem = 0;
-        private int totalCount = 0;
+
 
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
-
+            int firstItem = 0;
+            int lastItem = 0;
             RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-            totalCount = layoutManager.getItemCount();
+            int totalCount = layoutManager.getItemCount();
             //如果是网格的
             GridLayoutManager gridLayoutManager = (GridLayoutManager) layoutManager;
             if (layoutManager instanceof GridLayoutManager) {
