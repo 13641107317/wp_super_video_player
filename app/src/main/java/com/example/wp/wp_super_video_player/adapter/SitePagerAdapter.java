@@ -16,8 +16,9 @@ import java.util.HashMap;
 public class SitePagerAdapter extends FragmentPagerAdapter {
     private Context mContext;
     private int channelId;
-    private HashMap<Integer,DetailListFragment>mPagerMap;
-    public SitePagerAdapter(FragmentManager fm, Context context,int channelId) {
+    private HashMap<Integer, DetailListFragment> mPagerMap;
+
+    public SitePagerAdapter(FragmentManager fm, Context context, int channelId) {
         super(fm);
         this.channelId = channelId;
         this.mContext = context;
@@ -26,14 +27,14 @@ public class SitePagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        Fragment fragment = DetailListFragment.newInstance(1,channelId);
+        Fragment fragment = DetailListFragment.newInstance(position + 1, channelId);
         return fragment;
     }
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        Object obj =  super.instantiateItem(container, position);
-        if (obj instanceof DetailListFragment){
+        Object obj = super.instantiateItem(container, position);
+        if (obj instanceof DetailListFragment) {
             mPagerMap.put(position, (DetailListFragment) obj);
         }
         return obj;

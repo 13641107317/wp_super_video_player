@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -15,6 +14,7 @@ import com.example.wp.wp_super_video_player.api.SiteApi;
 import com.example.wp.wp_super_video_player.base.BaseFragment;
 import com.example.wp.wp_super_video_player.entity.Albnm;
 import com.example.wp.wp_super_video_player.entity.AlbumList;
+import com.example.wp.wp_super_video_player.entity.Channel;
 import com.example.wp.wp_super_video_player.entity.ErrorInfo;
 import com.example.wp.wp_super_video_player.entity.Site;
 import com.example.wp.wp_super_video_player.widget.IRecycleViewRefreshOrLoad;
@@ -62,9 +62,12 @@ public class DetailListFragment extends BaseFragment implements IRecycleViewRefr
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() == null) {
+            throw new RuntimeException("getArguments() is null!!");
+        }
         mSiteId = getArguments().getInt(SITE_ID);
         mChannelId = getArguments().getInt(CHANNEL_ID);
-        adapter = new DetailAdapter(getActivity());
+        adapter = new DetailAdapter(getActivity(),new Channel(mChannelId,getActivity()));
         loadData();
         if (mSiteId == Site.LETV) {
             mColunms = 2;
@@ -74,6 +77,7 @@ public class DetailListFragment extends BaseFragment implements IRecycleViewRefr
 
     @Override
     protected void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
+        mEmptyView.setText("正在加载数据...");
         mRecycleView.setGridLayout(3);
         mRecycleView.setAdapter(adapter);
         mRecycleView.setRecycleViewRefreshOrLoadListener(this);
@@ -112,16 +116,40 @@ public class DetailListFragment extends BaseFragment implements IRecycleViewRefr
         SiteApi.onGetChannelAlums(getActivity(), pagerNo, pagerSize, mSiteId, mChannelId, new OnGetChannelAlunmListener() {
             @Override
             public void onGetChannelAlunmsSuccess(AlbumList albnms) {
-                Log.i(TAG, "onGetChannelAlunmsSuccess: "+albnms.size());
-                for (Albnm albnms1 : albnms) {
-                    Log.i(TAG, "onGetChannelAlunmsSuccess: " + albnms1.toString());
 
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mEmptyView.setVisibility(View.GONE);
+
+                    }
+                });
+                for (Albnm albnm : albnms) {
+                    adapter.addData(albnm);
                 }
+
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+
+//                for (Albnm albnms1 : albnms) {
+//                    Log.i(TAG, "onGetChannelAlunmsSuccess: " + albnms1.toString());
+//
+//                }
             }
 
             @Override
             public void onGetChannelAlunmsFailed(ErrorInfo errorInfo) {
 
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mEmptyView.setText(getActivity().getResources().getString(R.string.data_failed_tip));
+                    }
+                });
             }
         });
     }
