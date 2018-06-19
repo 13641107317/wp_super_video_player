@@ -9,10 +9,10 @@ import android.widget.TextView;
 
 import com.example.wp.wp_super_video_player.R;
 import com.example.wp.wp_super_video_player.adapter.DetailAdapter;
-import com.example.wp.wp_super_video_player.api.OnGetChannelAlunmListener;
+import com.example.wp.wp_super_video_player.api.OnGetChannelAlbumListener;
 import com.example.wp.wp_super_video_player.api.SiteApi;
 import com.example.wp.wp_super_video_player.base.BaseFragment;
-import com.example.wp.wp_super_video_player.entity.Albnm;
+import com.example.wp.wp_super_video_player.entity.Album;
 import com.example.wp.wp_super_video_player.entity.AlbumList;
 import com.example.wp.wp_super_video_player.entity.Channel;
 import com.example.wp.wp_super_video_player.entity.ErrorInfo;
@@ -97,7 +97,6 @@ public class DetailListFragment extends BaseFragment implements IRecycleViewRefr
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-
                 refreshData();
                 mRecycleView.setRefreshCompleted();
             }
@@ -116,37 +115,28 @@ public class DetailListFragment extends BaseFragment implements IRecycleViewRefr
 
     private void loadData() {
         pagerNo++;
-        SiteApi.onGetChannelAlums(getActivity(), pagerNo, pagerSize, mSiteId, mChannelId, new OnGetChannelAlunmListener() {
+        SiteApi.onGetChannelAlums(getActivity(), pagerNo, pagerSize, mSiteId, mChannelId, new OnGetChannelAlbumListener() {
             @Override
             public void onGetChannelAlunmsSuccess(AlbumList albnms) {
-
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
                         mEmptyView.setVisibility(View.GONE);
-
                     }
                 });
-                for (Albnm albnm : albnms) {
-                    adapter.addData(albnm);
+                for (Album album : albnms) {
+                    adapter.addData(album);
                 }
-
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
                         adapter.notifyDataSetChanged();
                     }
                 });
-
-//                for (Albnm albnms1 : albnms) {
-//                    Log.i(TAG, "onGetChannelAlunmsSuccess: " + albnms1.toString());
-//
-//                }
             }
 
             @Override
             public void onGetChannelAlunmsFailed(ErrorInfo errorInfo) {
-
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {

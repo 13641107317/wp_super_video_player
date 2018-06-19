@@ -13,7 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.wp.wp_super_video_player.R;
-import com.example.wp.wp_super_video_player.entity.Albnm;
+import com.example.wp.wp_super_video_player.entity.Album;
 import com.example.wp.wp_super_video_player.entity.AlbumList;
 import com.example.wp.wp_super_video_player.entity.Channel;
 import com.example.wp.wp_super_video_player.utils.ImageUtils;
@@ -48,21 +48,21 @@ public class DetailAdapter extends RecyclerView.Adapter {
         if (mAlbumList == null && mAlbumList.size() == 0) {
             return;
         }
-        Albnm albnm = getItem(position);
+        Album album = getItem(position);
         if (holder instanceof ItemViewHolder) {
             ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
-            itemViewHolder.tv_name.setText(albnm.getTitle());
-            if (albnm.getTip().isEmpty()) {
+            itemViewHolder.tv_name.setText(album.getTitle());
+            if (album.getTip().isEmpty()) {
                 itemViewHolder.tv_tip.setVisibility(View.GONE);
             } else {
-                itemViewHolder.tv_tip.setText(albnm.getTip());
+                itemViewHolder.tv_tip.setText(album.getTip());
             }
             //重新计算宽高
             Point point = ImageUtils.getVerposterSize(mContext, mColunms);
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(point.x, point.y);
             itemViewHolder.albumPoster.setLayoutParams(params);
-            if (albnm.getVerImgUrl() != null) {
-                ImageUtils.displayImage(itemViewHolder.albumPoster, albnm.getVerImgUrl(), point.x, point.y);
+            if (album.getVerImgUrl() != null) {
+                ImageUtils.displayImage(itemViewHolder.albumPoster, album.getVerImgUrl(), point.x, point.y);
             } else {
                 //TODO 默认图
             }
@@ -70,7 +70,7 @@ public class DetailAdapter extends RecyclerView.Adapter {
         }
     }
 
-    private Albnm getItem(int position) {
+    private Album getItem(int position) {
         return mAlbumList.get(position);
 
     }
@@ -80,7 +80,7 @@ public class DetailAdapter extends RecyclerView.Adapter {
         mColunms = colunms;
     }
 
-    public void addData(Albnm albnms) {
+    public void addData(Album albnms) {
         mAlbumList.add(albnms);
     }
 

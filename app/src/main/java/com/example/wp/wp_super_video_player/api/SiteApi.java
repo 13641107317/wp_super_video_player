@@ -10,7 +10,7 @@ import com.example.wp.wp_super_video_player.entity.Site;
  */
 public class SiteApi {
     public static void onGetChannelAlums(Context context, int pagerNo, int pagerSize, int sideId,
-                                  int channelId, OnGetChannelAlunmListener listener) {
+                                  int channelId, OnGetChannelAlbumListener listener) {
         switch (sideId) {
             case Site.LETV:
                 new LetvApi().onGetChannelAlbums(new Channel(channelId, context),

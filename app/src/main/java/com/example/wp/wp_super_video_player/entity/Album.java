@@ -8,7 +8,7 @@ import com.example.wp.wp_super_video_player.App;
 /**
  * Created by WangPeng on 2018/6/16.
  */
-public class Albnm implements Parcelable {
+public class Album implements Parcelable {
     private String albumId;//专辑
     private int videoTotal;//集数
     private String title;//专辑名称
@@ -23,19 +23,19 @@ public class Albnm implements Parcelable {
     private boolean isComplected;
     private String letvStyle;
 
-    public Albnm(int siteId) {
+    public Album(int siteId) {
         site = new Site(siteId);
     }
 
-    public static final Creator<Albnm> CREATOR = new Creator<Albnm>() {
+    public static final Creator<Album> CREATOR = new Creator<Album>() {
         @Override
-        public Albnm createFromParcel(Parcel in) {
-            return new Albnm(in);
+        public Album createFromParcel(Parcel in) {
+            return new Album(in);
         }
 
         @Override
-        public Albnm[] newArray(int size) {
-            return new Albnm[size];
+        public Album[] newArray(int size) {
+            return new Album[size];
         }
     };
 
@@ -143,7 +143,7 @@ public class Albnm implements Parcelable {
         this.letvStyle = letvStyle;
     }
 
-    protected Albnm(Parcel in) {
+    protected Album(Parcel in) {
         albumId = in.readString();
         videoTotal = in.readInt();
         title = in.readString();
@@ -203,8 +203,8 @@ public class Albnm implements Parcelable {
         String res = App.getGson().toJson(this);
         return res;
     }
-    public Albnm fromJson(String json){
-        Albnm albnm = App.getGson().fromJson(json,Albnm.class);
-        return albnm;
+    public Album fromJson(String json){
+        Album album = App.getGson().fromJson(json,Album.class);
+        return album;
     }
 }

@@ -1,7 +1,7 @@
 package com.example.wp.wp_super_video_player.api;
 
 import com.example.wp.wp_super_video_player.App;
-import com.example.wp.wp_super_video_player.entity.Albnm;
+import com.example.wp.wp_super_video_player.entity.Album;
 import com.example.wp.wp_super_video_player.entity.AlbumList;
 import com.example.wp.wp_super_video_player.entity.Channel;
 import com.example.wp.wp_super_video_player.entity.ErrorInfo;
@@ -46,13 +46,13 @@ public class SohuApi extends BaseSiteApi {
 
     @Override
     void onGetChannelAlbums(Channel channel, int pagerNo, int pagerSize,
-                            OnGetChannelAlunmListener listener) {
+                            OnGetChannelAlbumListener listener) {
 
         String url = getChannelAlbumUrl(channel, pagerNo, pagerSize);
         doGetChannelAlbumByUrl(url, listener);
     }
 
-    private void doGetChannelAlbumByUrl(final String url, final OnGetChannelAlunmListener listener) {
+    private void doGetChannelAlbumByUrl(final String url, final OnGetChannelAlbumListener listener) {
         OkHttpUtils.excute(url, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -76,7 +76,6 @@ public class SohuApi extends BaseSiteApi {
                 Request result = App.getGson().fromJson(response.body().string(), Request.class);
                 AlbumList albnms = toConvertAlbumList(result);
                 if (albnms != null && albnms.size() > 0 && listener != null) {
-
                     listener.onGetChannelAlunmsSuccess(albnms);
                 } else {
                     ErrorInfo info = buildErrorInfo(url, "doGetChannelAlbumByUrl",
@@ -92,17 +91,17 @@ public class SohuApi extends BaseSiteApi {
         if (request.getData().getResultAlbumList().size() > 0) {
             list = new AlbumList();
             for (ResultAlbum resultAlbum : request.getData().getResultAlbumList()) {
-                Albnm albnm = new Albnm(Site.SOHU);
-                albnm.setAlbumDesc(resultAlbum.getTvDesc());
-                albnm.setAlbumId(resultAlbum.getAlbumId());
-                albnm.setHorImgUrl(resultAlbum.getHorHighPic());
-                albnm.setDirector(resultAlbum.getDirector());
-                albnm.setMainActor(resultAlbum.getMainActor());
-                albnm.setTip(resultAlbum.getTip());
-                albnm.setTitle(resultAlbum.getAlbumName());
-                albnm.setVerImgUrl(resultAlbum.getVerHighPic());
+                Album album = new Album(Site.SOHU);
+                album.setAlbumDesc(resultAlbum.getTvDesc());
+                album.setAlbumId(resultAlbum.getAlbumId());
+                album.setHorImgUrl(resultAlbum.getHorHighPic());
+                album.setDirector(resultAlbum.getDirector());
+                album.setMainActor(resultAlbum.getMainActor());
+                album.setTip(resultAlbum.getTip());
+                album.setTitle(resultAlbum.getAlbumName());
+                album.setVerImgUrl(resultAlbum.getVerHighPic());
 
-                list.add(albnm);
+                list.add(album);
             }
             return list;
         }

@@ -48,4 +48,6 @@ dependencies {
     //gson
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.squareup.okhttp3:okhttp:3.6.0'
+    //commons-lang
+    implementation 'commons-lang:commons-lang:2.6'
 }

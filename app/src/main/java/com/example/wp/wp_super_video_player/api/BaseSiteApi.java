@@ -7,5 +7,5 @@ import com.example.wp.wp_super_video_player.entity.Channel;
  */
 public abstract class BaseSiteApi {
     abstract void onGetChannelAlbums(Channel channel,int pagerNo,int pagerSize,
-                                     OnGetChannelAlunmListener listener);
+                                     OnGetChannelAlbumListener listener);
 }

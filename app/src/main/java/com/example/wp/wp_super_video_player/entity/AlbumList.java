@@ -7,11 +7,11 @@ import java.util.ArrayList;
 /**
  * Created by WangPeng on 2018/6/16.
  */
-public class AlbumList extends ArrayList<Albnm> {
+public class AlbumList extends ArrayList<Album> {
     private static final String TAG = AlbumList.class.getSimpleName();
 
     public void deBug() {
-        for (Albnm a : this) {
+        for (Album a : this) {
             Log.i(TAG, "albumList: " + a.toString());
         }
     }
