@@ -1,12 +1,15 @@
 package com.example.wp.wp_super_video_player.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.wp.wp_super_video_player.App;
 import com.example.wp.wp_super_video_player.R;
 import com.example.wp.wp_super_video_player.adapter.DetailAdapter;
 import com.example.wp.wp_super_video_player.api.OnGetChannelAlbumListener;
@@ -38,12 +41,14 @@ public class DetailListFragment extends BaseFragment implements IRecycleViewRefr
     TextView mEmptyView;
     private int mSiteId;
     private int mChannelId;
-    private int mColunms;
+    private int mColumns;
     private DetailAdapter adapter;
     private static Handler mHandler = new Handler(Looper.getMainLooper());
 
     private int pagerNo;
     private int pagerSize = 30;
+
+    private Context mContext;
 
     public static DetailListFragment newInstance(int siteId, int channelId) {
         DetailListFragment fragment = new DetailListFragment();
@@ -52,6 +57,12 @@ public class DetailListFragment extends BaseFragment implements IRecycleViewRefr
         args.putInt(SITE_ID, siteId);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = context;
     }
 
     @Override
@@ -67,21 +78,21 @@ public class DetailListFragment extends BaseFragment implements IRecycleViewRefr
         }
         mSiteId = getArguments().getInt(SITE_ID);
         mChannelId = getArguments().getInt(CHANNEL_ID);
-        adapter = new DetailAdapter(getActivity(),new Channel(mChannelId,getActivity()));
+        adapter = new DetailAdapter(mContext, new Channel(mChannelId, mContext));
         loadData();
         if (mSiteId == Site.LETV) {
-            mColunms = 2;
-            adapter.setColunms(mColunms);
-        }else{
-            mColunms = 3;
-            adapter.setColunms(mColunms);
+            mColumns = 2;
+            adapter.setColunms(mColumns);
+        } else {
+            mColumns = 3;
+            adapter.setColunms(mColumns);
         }
     }
 
     @Override
     protected void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
         mEmptyView.setText("正在加载数据...");
-        mRecycleView.setGridLayout(3);
+        mRecycleView.setGridLayout(mColumns);
         mRecycleView.setAdapter(adapter);
         mRecycleView.setRecycleViewRefreshOrLoadListener(this);
 
@@ -89,7 +100,13 @@ public class DetailListFragment extends BaseFragment implements IRecycleViewRefr
 
     @Override
     public void loadMore() {
-
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                loadData();
+                mRecycleView.setLoadMoreCompleted();
+            }
+        }, LOADMORE_TIME);
     }
 
     @Override
@@ -104,18 +121,24 @@ public class DetailListFragment extends BaseFragment implements IRecycleViewRefr
     }
 
     private void refreshData() {
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                loadData();
-                mRecycleView.setLoadMoreCompleted();
-            }
-        }, LOADMORE_TIME);
+        pagerNo = 0;
+        adapter = null;
+        adapter = new DetailAdapter(mContext, new Channel(mChannelId, mContext));
+        loadData();
+        if (mSiteId == Site.LETV) {
+            mColumns = 2;
+            adapter.setColunms(mColumns);
+        } else {
+            mColumns = 3;
+            adapter.setColunms(mColumns);
+        }
+        mRecycleView.setAdapter(adapter);
+        Toast.makeText(mContext, "已经是最新数据了", Toast.LENGTH_SHORT).show();
     }
 
     private void loadData() {
         pagerNo++;
-        SiteApi.onGetChannelAlums(getActivity(), pagerNo, pagerSize, mSiteId, mChannelId, new OnGetChannelAlbumListener() {
+        SiteApi.onGetChannelAlums(App.getmContext(), pagerNo, pagerSize, mSiteId, mChannelId, new OnGetChannelAlbumListener() {
             @Override
             public void onGetChannelAlunmsSuccess(AlbumList albnms) {
                 mHandler.post(new Runnable() {
@@ -145,5 +168,12 @@ public class DetailListFragment extends BaseFragment implements IRecycleViewRefr
                 });
             }
         });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mHandler = null;
+        mContext = null;
     }
 }

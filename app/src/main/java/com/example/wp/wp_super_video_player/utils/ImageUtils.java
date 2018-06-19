@@ -46,7 +46,7 @@ public class ImageUtils {
      * @param colunms
      * @return
      */
-    public static Point getVerposterSize(Context context, int colunms) {
+    public static Point getVerPosterSize(Context context, int colunms) {
         int width = getScreenWidthPixel(context) / colunms;
         width = width - (int)context.getResources().getDimension(R.dimen.dimen_8dp);
         int height = Math.round((float)width/VER_POSTER_RATIO);
@@ -64,5 +64,15 @@ public class ImageUtils {
         int width = point.x;
         return width;
 
+    }
+
+    public static Point getHorPosterSize(Context context, int colunms) {
+        int width = getScreenWidthPixel(context) / colunms;
+        width = width - (int)context.getResources().getDimension(R.dimen.dimen_8dp);
+        int height = Math.round((float)width/HOR_POSTER_RATIO);
+        Point point = new Point();
+        point.x = width;
+        point.y = height;
+        return point;
     }
 }

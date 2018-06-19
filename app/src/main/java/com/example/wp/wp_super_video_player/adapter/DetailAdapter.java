@@ -57,12 +57,22 @@ public class DetailAdapter extends RecyclerView.Adapter {
             } else {
                 itemViewHolder.tv_tip.setText(album.getTip());
             }
-            //重新计算宽高
-            Point point = ImageUtils.getVerposterSize(mContext, mColunms);
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(point.x, point.y);
-            itemViewHolder.albumPoster.setLayoutParams(params);
+            Point point = null;
+            if (mColunms == 2) {
+                point = ImageUtils.getHorPosterSize(mContext, mColunms);
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(point.x, point.y);
+                itemViewHolder.albumPoster.setLayoutParams(params);
+            } else {
+                //重新计算宽高
+                point = ImageUtils.getVerPosterSize(mContext, mColunms);
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(point.x, point.y);
+                itemViewHolder.albumPoster.setLayoutParams(params);
+            }
+
             if (album.getVerImgUrl() != null) {
                 ImageUtils.displayImage(itemViewHolder.albumPoster, album.getVerImgUrl(), point.x, point.y);
+            } else if (album.getHorImgUrl() != null) {
+                ImageUtils.displayImage(itemViewHolder.albumPoster, album.getHorImgUrl(), point.x, point.y);
             } else {
                 //TODO 默认图
             }

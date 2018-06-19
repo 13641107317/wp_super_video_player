@@ -44,7 +44,7 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void initGridView() {
-        mGridView.setAdapter(new ChannelAdapter(getContext()));
+        mGridView.setAdapter(new ChannelAdapter(App.getmContext()));
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {

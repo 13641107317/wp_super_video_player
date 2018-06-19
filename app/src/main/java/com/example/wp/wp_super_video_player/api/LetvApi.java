@@ -87,31 +87,37 @@ public class LetvApi extends BaseSiteApi {
                     listener.onGetChannelAlunmsFailed(info);
                     return;
                 }
-                String json = response.body().toString();
+                String json = response.body().string();
                 try {
                     JSONObject resultJson = new JSONObject(json);
-                    JSONObject jsonBody = resultJson.optJSONObject("body");
-                    if (jsonBody.optInt("album_count") > 0) {
+                    JSONObject bodyJson = resultJson.optJSONObject("body");
+                    if (bodyJson.optInt("album_count") > 0) {
                         AlbumList list = new AlbumList();
-                        JSONArray album_list = jsonBody.getJSONArray("album_list");
-                        for (int i = 0; i < album_list.length(); i++) {
+                        JSONArray albumListJosn = bodyJson.optJSONArray("album_list");
+                        for (int i = 0; i< albumListJosn.length(); i++) {
                             Album album = new Album(Site.LETV);
-                            JSONObject albumJson = album_list.getJSONObject(i);
+                            JSONObject albumJson = albumListJosn.getJSONObject(i);
                             album.setAlbumId(albumJson.getString("aid"));
                             album.setAlbumDesc(albumJson.getString("subname"));
                             album.setTitle(albumJson.getString("name"));
                             album.setTip(albumJson.getString("subname"));
                             JSONObject jsonImage = albumJson.getJSONObject("images");
                             //读取【400*300】字符
-                            String image_url = StringEscapeUtils.unescapeJava(jsonImage.getString("400*300"));
-                            album.setHorImgUrl(image_url);
+                            String imageurl = StringEscapeUtils.unescapeJava(jsonImage.getString("400*300"));
+                            album.setHorImgUrl(imageurl);
                             list.add(album);
                         }
-                        if (list != null && list.size() > 0 && listener != null) {
-                            listener.onGetChannelAlunmsSuccess(list);
+                        if (list != null) {
+                            if (list.size() > 0 && listener != null) {
+                                listener.onGetChannelAlunmsSuccess(list);
+                            }
+                        } else {
+                            ErrorInfo info  = buildErrorInfo(url, "doGetChannelAlbumsByUrl", null, ErrorInfo.ERROR_TYPE_DATA_CONVERT);
+                            listener.onGetChannelAlunmsFailed(info);
                         }
                     }
                 } catch (JSONException e) {
+                    e.printStackTrace();
                     ErrorInfo info = buildErrorInfo(url, "doGetChannelAlbumByUrl",
                             null, ErrorInfo.ERROR_TYPE_PARSE_JSON);
                     listener.onGetChannelAlunmsFailed(info);
@@ -133,17 +139,16 @@ public class LetvApi extends BaseSiteApi {
         return errorInfo;
     }
 
-    private String getChannelAlbumUrl(Channel channel, int pagerNo, int pagerSize) {
+    private String getChannelAlbumUrl(Channel channel, int pageNo, int pageSize) {
         if (channel.getChannelId() == Channel.DOCUMENTRY) {
-            return String.format(ALBUM_LIST_URL_DOCUMENTARY_FORMAT, convertChannelId(channel, pagerNo, pagerSize));
+            return String.format(ALBUM_LIST_URL_DOCUMENTARY_FORMAT, convertChannelId(channel), pageNo, pageSize);
         } else if (channel.getChannelId() == Channel.DOCUMENTRY) {
-            return String.format(ALBUM_LIST_URL_SHOW_FORMAT, convertChannelId(channel, pagerNo, pagerSize));
+            return String.format(ALBUM_LIST_URL_SHOW_FORMAT, convertChannelId(channel), pageNo, pageSize);
         }
-        return String.format(ALBUM_LIST_URL_FORMAT, convertChannelId(channel, pagerNo, pagerSize));
-
+        return String.format(ALBUM_LIST_URL_FORMAT, convertChannelId(channel), pageNo, pageSize);
     }
 
-    private int convertChannelId(Channel channel, int pagerNo, int pagerSize) {
+    private int convertChannelId(Channel channel) {
         int channelId = -1;//-1 无效值
         switch (channel.getChannelId()) {
             case Channel.SHOW:
