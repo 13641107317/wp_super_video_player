@@ -53,15 +53,15 @@ public class PullLoadRecycleView extends LinearLayout {
         initView(context);
     }
 
-    @SuppressLint("ResourceAsColor")
     private void initView(Context context) {
         mContext = context;
         final View view = LayoutInflater.from(mContext).inflate(R.layout.pull_loadmore, null);
         mSwipeLayout = view.findViewById(R.id.swipe_layout);
         mRecyclerView = view.findViewById(R.id.rv_loadmore);
         mFooter = view.findViewById(R.id.footer_view);
-        //设置空间刷新时progress颜色渐变
-        mSwipeLayout.setColorSchemeColors(android.R.color.holo_green_light, android.R.color.holo_blue_light, android.R.color.holo_red_light);
+        //设置刷新时控件颜色渐变
+        mSwipeLayout.setColorSchemeResources(android.R.color.holo_green_dark, android.R.color.holo_blue_dark, android.R.color.holo_orange_dark);
+
         mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayoutOnRefresh());
         //设置固定大小
         mRecyclerView.setHasFixedSize(true);
@@ -116,7 +116,8 @@ public class PullLoadRecycleView extends LinearLayout {
         isRefresh = false;
         isLoadMore = false;
         setRefreshing(false);
-
+        mFooter.animate().translationY(mFooter.getHeight()).setInterpolator(new AccelerateDecelerateInterpolator())
+                .setDuration(300).start();
     }
 
     //设置是否正在刷新数据
@@ -139,6 +140,7 @@ public class PullLoadRecycleView extends LinearLayout {
         @Override
         public void onRefresh() {
             if (!isRefresh) {
+                isRefresh = true;
                 refreshData();
 
             }

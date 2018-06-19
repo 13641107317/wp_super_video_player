@@ -2,18 +2,21 @@ package com.example.wp.wp_super_video_player.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Point;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.wp.wp_super_video_player.R;
 import com.example.wp.wp_super_video_player.entity.Albnm;
 import com.example.wp.wp_super_video_player.entity.AlbumList;
 import com.example.wp.wp_super_video_player.entity.Channel;
+import com.example.wp.wp_super_video_player.utils.ImageUtils;
 
 /**
  * Created by WangPeng on 2018/6/15.
@@ -54,6 +57,16 @@ public class DetailAdapter extends RecyclerView.Adapter {
             } else {
                 itemViewHolder.tv_tip.setText(albnm.getTip());
             }
+            //重新计算宽高
+            Point point = ImageUtils.getVerposterSize(mContext, mColunms);
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(point.x, point.y);
+            itemViewHolder.albumPoster.setLayoutParams(params);
+            if (albnm.getVerImgUrl() != null) {
+                ImageUtils.displayImage(itemViewHolder.albumPoster, albnm.getVerImgUrl(), point.x, point.y);
+            } else {
+                //TODO 默认图
+            }
+
         }
     }
 
@@ -86,7 +99,7 @@ public class DetailAdapter extends RecyclerView.Adapter {
 
         public ItemViewHolder(View itemView) {
             super(itemView);
-            resultContainer = itemView.findViewById(R.id.ll_album);
+            resultContainer = itemView.findViewById(R.id.album_container);
             albumPoster = itemView.findViewById(R.id.iv_album_poster);
             tv_name = itemView.findViewById(R.id.tv_album_name);
             tv_tip = itemView.findViewById(R.id.tv_album_tip);

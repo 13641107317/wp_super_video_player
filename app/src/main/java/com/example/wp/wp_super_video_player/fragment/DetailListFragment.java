@@ -72,6 +72,9 @@ public class DetailListFragment extends BaseFragment implements IRecycleViewRefr
         if (mSiteId == Site.LETV) {
             mColunms = 2;
             adapter.setColunms(mColunms);
+        }else{
+            mColunms = 3;
+            adapter.setColunms(mColunms);
         }
     }
 
