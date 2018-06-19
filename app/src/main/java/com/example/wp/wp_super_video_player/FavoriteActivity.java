@@ -1,8 +1,9 @@
 package com.example.wp.wp_super_video_player;
 
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.example.wp.wp_super_video_player.base.BaseActivity;
 
 public class FavoriteActivity extends BaseActivity {
 

@@ -11,6 +11,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.wp.wp_super_video_player.adapter.SitePagerAdapter;
 import com.example.wp.wp_super_video_player.api.Router;
+import com.example.wp.wp_super_video_player.base.BaseActivity;
 import com.example.wp.wp_super_video_player.entity.Channel;
 
 import butterknife.BindView;

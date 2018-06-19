@@ -1,9 +1,11 @@
-package com.example.wp.wp_super_video_player;
+package com.example.wp.wp_super_video_player.base;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+
+import com.example.wp.wp_super_video_player.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

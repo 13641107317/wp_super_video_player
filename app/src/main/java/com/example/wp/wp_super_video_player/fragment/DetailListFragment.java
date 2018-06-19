@@ -173,7 +173,6 @@ public class DetailListFragment extends BaseFragment implements IRecycleViewRefr
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mHandler = null;
         mContext = null;
     }
 }

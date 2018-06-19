@@ -3,10 +3,12 @@ package com.example.wp.wp_super_video_player;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
+import com.example.wp.wp_super_video_player.base.BaseActivity;
+
 /**
  * Created by wangpeng .
  */
-class LiveActivity extends BaseActivity{
+class LiveActivity extends BaseActivity {
     @Override
     public int setLayoutId() {
         return R.layout.activity_live;
