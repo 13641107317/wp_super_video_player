@@ -21,14 +21,13 @@ public class ImageUtils {
     public static void displayImage(ImageView imageView, String url, int width, int height) {
         if (imageView != null && url != null && width > 0 && height > 0) {
             if (width > height) {
-                GlideApp
-                        .with(imageView.getContext())
-                        .load(url)
-                        .error(R.drawable.ic_loading_hor)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .centerCrop()
-                        .override(height, width)
-                        .into(imageView);
+                GlideApp.with(imageView.getContext())
+                        .load(url) //加载图片url
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)// 设置缓存
+                        .error(R.drawable.ic_loading_hor)//出错时使用默认图
+                        .fitCenter()//设置图片居中, centerCrop会截断大图,不会自适应, fitCenter居中自适应
+                        .override(height,width)//重写宽高
+                        .into(imageView);//加载imageview上
             }else{
                 GlideApp.with(imageView.getContext())
                         .load(url) //加载图片url
