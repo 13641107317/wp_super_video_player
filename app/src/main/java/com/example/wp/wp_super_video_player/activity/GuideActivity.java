@@ -1,4 +1,4 @@
-package com.example.wp.wp_super_video_player;
+package com.example.wp.wp_super_video_player.activity;
 
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.wp.wp_super_video_player.R;
 import com.example.wp.wp_super_video_player.api.Router;
 
 import java.util.ArrayList;

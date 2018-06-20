@@ -1,4 +1,4 @@
-package com.example.wp.wp_super_video_player;
+package com.example.wp.wp_super_video_player.activity;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,9 +15,12 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.example.wp.wp_super_video_player.R;
 import com.example.wp.wp_super_video_player.api.Router;
-import com.example.wp.wp_super_video_player.base.BaseActivity;
+import com.example.wp.wp_super_video_player.fragment.AboutFragment;
+import com.example.wp.wp_super_video_player.fragment.BlogFragment;
 import com.example.wp.wp_super_video_player.fragment.FragmentManagerWrapper;
+import com.example.wp.wp_super_video_player.fragment.HomeFragment;
 
 import butterknife.BindView;
 

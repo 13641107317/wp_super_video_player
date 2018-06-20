@@ -1,4 +1,4 @@
-package com.example.wp.wp_super_video_player;
+package com.example.wp.wp_super_video_player.activity;
 
 import android.content.SharedPreferences;
 import android.os.Handler;
@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.wp.wp_super_video_player.R;
 import com.example.wp.wp_super_video_player.api.Router;
 
 public class SplashActivity extends AppCompatActivity {

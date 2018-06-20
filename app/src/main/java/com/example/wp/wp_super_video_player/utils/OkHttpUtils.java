@@ -1,6 +1,6 @@
 package com.example.wp.wp_super_video_player.utils;
 
-import com.example.wp.wp_super_video_player.App;
+import com.example.wp.wp_super_video_player.api.App;
 
 import okhttp3.Callback;
 import okhttp3.Request;

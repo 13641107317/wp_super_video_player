@@ -1,4 +1,4 @@
-package com.example.wp.wp_super_video_player;
+package com.example.wp.wp_super_video_player.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -6,12 +6,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.wp.wp_super_video_player.R;
 import com.example.wp.wp_super_video_player.adapter.ChannelAdapter;
+import com.example.wp.wp_super_video_player.api.App;
 import com.example.wp.wp_super_video_player.api.Router;
 import com.example.wp.wp_super_video_player.base.BaseFragment;
 import com.example.wp.wp_super_video_player.entity.Channel;
+import com.example.wp.wp_super_video_player.utils.GlideImageLoader;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;

@@ -1,6 +1,7 @@
 package com.example.wp.wp_super_video_player.indicator;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.view.View;
@@ -11,6 +12,7 @@ import java.util.List;
 
 /**
  * Created by WangPeng on 2018/6/19.
+ * 指示器
  */
 public class ViewPagerIndicatorView extends View implements IPagerIndircatorView {
     private Paint mPaint;
@@ -21,6 +23,11 @@ public class ViewPagerIndicatorView extends View implements IPagerIndircatorView
     //控制动画执行的速率
     private Interpolator mStartInterpolator = new LinearInterpolator();
     private Interpolator mEndInterpolator = new LinearInterpolator();
+    //指示器左右园半径
+    private int mRoundRadius;
+    //指示器颜色
+    private int mFillColor;
+
 
     public ViewPagerIndicatorView(Context context) {
         super(context);
@@ -61,7 +68,6 @@ public class ViewPagerIndicatorView extends View implements IPagerIndircatorView
 
     @Override
     public void onPagerScrolled(int position, float positionOffsetPercent, int positionOffsetPixel) {
-
         if (mpoPositionList == null || mpoPositionList.isEmpty()) {
             return;
         }
@@ -81,11 +87,26 @@ public class ViewPagerIndicatorView extends View implements IPagerIndircatorView
                         mStartInterpolator.getInterpolation(positionOffsetPercent);
 
         mRectF.bottom = current.mContentBottom + mVerticalPadding;
-
+        mRoundRadius = (int) (mRectF.height() / 2);
+        invalidate();
     }
 
     @Override
     public void onPagerScrollStateChanged(int position) {
 
+    }
+
+    public void setFillColor(int fillColor) {
+        this.mFillColor = fillColor;
+    }
+
+    /**
+     * 画指示器背景
+     * @param canvas
+     */
+    @Override
+    protected void onDraw(Canvas canvas) {
+        mPaint.setColor(mFillColor);
+        canvas.drawRoundRect(mRectF,mRoundRadius,mRoundRadius,mPaint);
     }
 }

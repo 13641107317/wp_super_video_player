@@ -1,4 +1,4 @@
-package com.example.wp.wp_super_video_player;
+package com.example.wp.wp_super_video_player.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,6 +8,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
 
+import com.example.wp.wp_super_video_player.R;
 import com.example.wp.wp_super_video_player.base.BaseFragment;
 
 import butterknife.BindView;

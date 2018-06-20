@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.wp.wp_super_video_player.App;
+import com.example.wp.wp_super_video_player.api.App;
 import com.example.wp.wp_super_video_player.R;
 import com.example.wp.wp_super_video_player.adapter.DetailAdapter;
 import com.example.wp.wp_super_video_player.api.OnGetChannelAlbumListener;

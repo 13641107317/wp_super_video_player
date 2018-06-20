@@ -3,7 +3,7 @@ package com.example.wp.wp_super_video_player.entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.example.wp.wp_super_video_player.App;
+import com.example.wp.wp_super_video_player.api.App;
 
 /**
  * Created by WangPeng on 2018/6/16.

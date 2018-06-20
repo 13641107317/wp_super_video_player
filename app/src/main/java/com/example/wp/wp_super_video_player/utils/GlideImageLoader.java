@@ -1,4 +1,4 @@
-package com.example.wp.wp_super_video_player;
+package com.example.wp.wp_super_video_player.utils;
 
 import android.content.Context;
 import android.widget.ImageView;

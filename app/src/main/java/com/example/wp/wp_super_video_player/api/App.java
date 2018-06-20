@@ -1,4 +1,4 @@
-package com.example.wp.wp_super_video_player;
+package com.example.wp.wp_super_video_player.api;
 
 import android.app.Application;
 import android.content.Context;

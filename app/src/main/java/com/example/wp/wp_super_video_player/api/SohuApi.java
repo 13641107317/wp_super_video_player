@@ -1,6 +1,5 @@
 package com.example.wp.wp_super_video_player.api;
 
-import com.example.wp.wp_super_video_player.App;
 import com.example.wp.wp_super_video_player.entity.Album;
 import com.example.wp.wp_super_video_player.entity.AlbumList;
 import com.example.wp.wp_super_video_player.entity.Channel;

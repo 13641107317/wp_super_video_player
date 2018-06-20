@@ -1,4 +1,4 @@
-package com.example.wp.wp_super_video_player.base;
+package com.example.wp.wp_super_video_player.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
