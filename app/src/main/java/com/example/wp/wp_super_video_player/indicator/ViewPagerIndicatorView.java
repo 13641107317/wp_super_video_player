@@ -14,7 +14,7 @@ import java.util.List;
  * Created by WangPeng on 2018/6/19.
  * 指示器
  */
-public class ViewPagerIndicatorView extends View implements IPagerIndircatorView {
+public class ViewPagerIndicatorView extends View implements IPagerIndicatorView {
     private Paint mPaint;
     private int mVerticalPadding;
     private int mHorizonalPadding;

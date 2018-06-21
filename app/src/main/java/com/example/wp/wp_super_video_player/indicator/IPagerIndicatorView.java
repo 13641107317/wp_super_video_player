@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by wangpeng .
  */
-public interface IPagerIndircatorView extends IPagerChangeListener {
+public interface IPagerIndicatorView extends IPagerChangeListener {
 
     void setPositionData(List<PositionEntity> list);
 }

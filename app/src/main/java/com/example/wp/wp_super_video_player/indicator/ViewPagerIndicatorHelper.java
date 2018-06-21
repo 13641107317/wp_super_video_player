@@ -1,6 +1,7 @@
 package com.example.wp.wp_super_video_player.indicator;
 
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.util.SparseArray;
 import android.util.SparseBooleanArray;
 
@@ -123,6 +124,45 @@ public class ViewPagerIndicatorHelper {
     }
 
     public void onPagerSelected(int position) {
+        int currentIndex = setCurrentIndex(position);
+        if (mScrollListener != null) {
+            mScrollListener.onSelected(currentIndex, mTotalCount);
+            mDisSelectedItems.put(mCurrentIndex, false);
+            for (int i = 0, j = mTotalCount; i < j; i++) {
+                if (i == mCurrentIndex) {
+                    continue;
+                }
+                boolean disSelected = mDisSelectedItems.get(i);
+                if (!disSelected) {
+                    mScrollListener.onDisSelected(i, mTotalCount);
+                    mDisSelectedItems.put(i, true);
+                }
+            }
+        }
+    }
 
+    public void onPagerScrollStateChange(int scrollState) {
+        mScrollState = scrollState;
+    }
+
+    public void setTotalCount(int totalCount) {
+        mTotalCount = totalCount;
+
+    }
+
+    public int getScrollState() {
+        return mScrollState;
+    }
+
+    public int getTotalCount() {
+
+        return mTotalCount;
+    }
+
+    private int setCurrentIndex(int index) {
+        mLaseIndex = mCurrentIndex;
+        //重新赋值
+        mCurrentIndex = getSafeIndex(index);
+        return mCurrentIndex;
     }
 }
