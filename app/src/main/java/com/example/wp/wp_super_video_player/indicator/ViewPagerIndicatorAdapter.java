@@ -15,13 +15,13 @@ public abstract class ViewPagerIndicatorAdapter {
         return 1;
     }
     private final DataSetObservable mDataSetObservable = new DataSetObservable();
-    private final void registerDataSetObservable(DataSetObserver observable){
+    public final void registerDataSetObservable(DataSetObserver observable){
         mDataSetObservable.registerObserver(observable);
     }
-    private final void unRegisterDataSetObservable(DataSetObserver observable){
+    public final void unRegisterDataSetObservable(DataSetObserver observable){
         mDataSetObservable.unregisterObserver(observable);
     }
-    private final void notifySetDataChange(){
+    public final void notifySetDataChange(){
         mDataSetObservable.notifyChanged();
     }
 }

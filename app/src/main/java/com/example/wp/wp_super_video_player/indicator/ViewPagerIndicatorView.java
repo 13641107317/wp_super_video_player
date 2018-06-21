@@ -17,17 +17,16 @@ import java.util.List;
 public class ViewPagerIndicatorView extends View implements IPagerIndicatorView {
     private Paint mPaint;
     private int mVerticalPadding;
-    private int mHorizonalPadding;
-    private List<PositionEntity> mpoPositionList;
-    private RectF mRectF = new RectF();
+    private int mHorizontalPadding;
+    private List<PositionData> mPositionDataList;
+    private RectF mRect = new RectF();
     //控制动画执行的速率
-    private Interpolator mStartInterpolator = new LinearInterpolator();
-    private Interpolator mEndInterpolator = new LinearInterpolator();
-    //指示器左右园半径
+    private Interpolator  mStartInterpolator = new LinearInterpolator();
+    private Interpolator  mEndInterpolator = new LinearInterpolator();
+    // 指示器左右圆半径
     private int mRoundRadius;
-    //指示器颜色
+    // 指示器颜色
     private int mFillColor;
-
 
     public ViewPagerIndicatorView(Context context) {
         super(context);
@@ -40,7 +39,7 @@ public class ViewPagerIndicatorView extends View implements IPagerIndicatorView 
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setStyle(Paint.Style.FILL);
         mVerticalPadding = dip2px(context, 6);
-        mHorizonalPadding = dip2px(context, 8);
+        mHorizontalPadding = dip2px(context, 8);
     }
 
     /**
@@ -57,8 +56,8 @@ public class ViewPagerIndicatorView extends View implements IPagerIndicatorView 
     }
 
     @Override
-    public void setPositionData(List<PositionEntity> list) {
-        mpoPositionList = list;
+    public void setPositionData(List<PositionData> list) {
+        mPositionDataList = list;
     }
 
     @Override
@@ -68,26 +67,19 @@ public class ViewPagerIndicatorView extends View implements IPagerIndicatorView 
 
     @Override
     public void onPagerScrolled(int position, float positionOffsetPercent, int positionOffsetPixel) {
-        if (mpoPositionList == null || mpoPositionList.isEmpty()) {
+        if (mPositionDataList == null || mPositionDataList.isEmpty()) {
             return;
         }
-        int currentPosition = Math.min(mpoPositionList.size() - 1, position);
-        int nextPosition = Math.min(mpoPositionList.size() - 1, position + 1);
-        PositionEntity current = mpoPositionList.get(currentPosition);
-        PositionEntity next = mpoPositionList.get(nextPosition);
-        mRectF.left = current.mContentLeft -
-                mHorizonalPadding +
-                (next.mContentLeft - current.mContentLeft) *
-                        mEndInterpolator
-                                .getInterpolation(positionOffsetPercent);
-        mRectF.top = current.mContentTop - mVerticalPadding;
-        //计算下一个和上个的差值 * 速率 = 滑动过的距离
-        mRectF.right = current.mContentRight + mHorizonalPadding +
-                (next.mContentRight - current.mContentRight) *
-                        mStartInterpolator.getInterpolation(positionOffsetPercent);
-
-        mRectF.bottom = current.mContentBottom + mVerticalPadding;
-        mRoundRadius = (int) (mRectF.height() / 2);
+        int currentPosition = Math.min(mPositionDataList.size() - 1, position);
+        int nextPosition = Math.min(mPositionDataList.size() - 1, position + 1);
+        PositionData current = mPositionDataList.get(currentPosition);
+        PositionData next = mPositionDataList.get(nextPosition);
+        mRect.left = current.mContentLeft - mHorizontalPadding + (next.mContentLeft - current.mContentLeft) * mEndInterpolator.getInterpolation(positionOffsetPercent);
+        mRect.top = current.mContentTop - mVerticalPadding;
+        // 计算下一个和上个的差值*速率=滑动过距离(next.mContentRight - current.mContentRight)*mStartInterpolator.getInterpolation(positionOffsetPercent);
+        mRect.right = current.mContentRight + mHorizontalPadding + (next.mContentRight - current.mContentRight)*mStartInterpolator.getInterpolation(positionOffsetPercent);
+        mRect.bottom = current.mContentBottom + mVerticalPadding;
+        mRoundRadius = (int) mRect.height() / 2;
         invalidate();
     }
 
@@ -107,6 +99,6 @@ public class ViewPagerIndicatorView extends View implements IPagerIndicatorView 
     @Override
     protected void onDraw(Canvas canvas) {
         mPaint.setColor(mFillColor);
-        canvas.drawRoundRect(mRectF,mRoundRadius,mRoundRadius,mPaint);
+        canvas.drawRoundRect(mRect,mRoundRadius,mRoundRadius,mPaint);
     }
 }

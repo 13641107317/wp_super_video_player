@@ -3,7 +3,7 @@ package com.example.wp.wp_super_video_player.indicator;
 /**
  * Created by wangpeng .
  */
-public class PositionEntity {
+public class PositionData {
     public int mLeft;
     public int mRight;
     public int mTop;

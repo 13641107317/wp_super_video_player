@@ -7,6 +7,14 @@
     android:orientation="vertical">
 
     <include layout="@layout/toolbar" />
+    <com.example.wp.wp_super_video_player.indicator.CoolIndicatorLayout
+        android:id="@+id/viewpager_indicator"
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/dimen_10dp"
+        android:background="@color/white"
+        android:layout_height="@dimen/dimen_80dp">
+
+    </com.example.wp.wp_super_video_player.indicator.CoolIndicatorLayout>
     <android.support.v4.view.ViewPager
         android:id="@+id/detail_viewpager"
         android:layout_width="match_parent"

@@ -1,7 +1,6 @@
 package com.example.wp.wp_super_video_player.indicator;
 
 import android.support.v4.view.ViewPager;
-import android.text.TextUtils;
 import android.util.SparseArray;
 import android.util.SparseBooleanArray;
 
@@ -9,145 +8,154 @@ import android.util.SparseBooleanArray;
  * Created by wangpeng .
  */
 public class ViewPagerIndicatorHelper {
-    private IPagerTitle mScrollListener;
     private int mCurrentIndex;
     private int mTotalCount;
     private int mScrollState = ViewPager.SCROLL_STATE_IDLE;
-    private int mLaseIndex;
+    private int mLastIndex;
     private float mLastPositionOffsetSum;
     private SparseArray<Float> mLeavePercents = new SparseArray<>();
-    private SparseBooleanArray mDisSelectedItems = new SparseBooleanArray();
+    private SparseBooleanArray mDeSelectedItems = new SparseBooleanArray();
 
-    public void setScrollListener(IPagerTitle listener) {
-        this.mScrollListener = listener;
-    }
 
     public ViewPagerIndicatorHelper() {
+
     }
 
-    public void onPagerScrolled(int position, float positionOffset, int positionPixel) {
+    public void setScrollListener(IPagerTitle listener) {
+        mScrollListener = listener;
+    }
+
+    private IPagerTitle mScrollListener;
+
+    public void onPageScrolled(int position, float positionOffset, int positionPixel) {
         float currentPositionOffsetSum = position + positionOffset;
         boolean isLeftToRight = currentPositionOffsetSum > mLastPositionOffsetSum;
         int safePosition = getSafeIndex(position);
-        //不是就绪状态
+        //不是就绪状态时
         if (mScrollState != ViewPager.SCROLL_STATE_IDLE) {
             int enterIndex, leaveIndex;
-            float enterPercent, leavePercent;
+            float enterPerent, leavePercent;
             if (isLeftToRight) {
                 enterIndex = getSafeIndex(position + 1);
-                enterPercent = positionOffset;
+                enterPerent = positionOffset;
                 leaveIndex = safePosition;
                 leavePercent = positionOffset;
-
             } else {
                 enterIndex = safePosition;
-                enterPercent = 1.0f - positionOffset;
+                enterPerent = 1.0f - positionOffset;
                 leaveIndex = getSafeIndex(safePosition + 1);
                 leavePercent = 1.0f - positionOffset;
             }
+
             for (int i = 0; i < mTotalCount; i++) {
                 if (i == enterIndex || i == leaveIndex) {
                     continue;
                 }
-                leavePercent = mLeavePercents.get(i, 0.0f);
-                if (leavePercent != 1.0f) {
+                Float leavedPercent = mLeavePercents.get(i, 0.0f);
+                if (leavedPercent != 1.0f) {
                     mScrollListener.onLeave(i, mTotalCount, 1.0f, isLeftToRight);
                     mLeavePercents.put(i, 1.0f);
-
                 }
             }
             if (enterIndex == leaveIndex) {
-                if (enterIndex == mTotalCount - 1 && mLeavePercents.get(enterIndex, 0.0f) != 0.0f &&
-                        enterPercent == 0.0f && isLeftToRight) {
-                    boolean dispatchEnterEvent = mScrollState ==
-                            ViewPager.SCROLL_STATE_DRAGGING || enterIndex == mCurrentIndex;
-                    if (dispatchEnterEvent) {
+                if (enterIndex == mTotalCount - 1 && mLeavePercents.get(enterIndex, 0.0f) != 0.0f && enterPerent == 0.0f && isLeftToRight) {
+                    boolean disPatchEnterEvent = mScrollState == ViewPager.SCROLL_STATE_DRAGGING || enterIndex == mCurrentIndex;
+                    if (disPatchEnterEvent) {
                         mScrollListener.onEnter(enterIndex, mTotalCount, 1.0f, true);
                         mLeavePercents.put(enterIndex, 0.0f);
                     }
                 }
                 return;
             }
-            if (1.0f - mLeavePercents.get(enterIndex, 0.0f) != enterPercent) {
-                boolean dispatchEnterEvent = mScrollState ==
-                        ViewPager.SCROLL_STATE_DRAGGING || enterIndex == mCurrentIndex;
-                if (dispatchEnterEvent) {
-                    mScrollListener.onEnter(enterIndex, mTotalCount, enterPercent, isLeftToRight);
-                    mLeavePercents.put(enterIndex, 1.0f - enterPercent);
+            if (1.0f - mLeavePercents.get(enterIndex, 0.0f) != enterPerent) {
+                boolean disPatchEnterEvent = mScrollState == ViewPager.SCROLL_STATE_DRAGGING || enterIndex == mCurrentIndex;
+                if (disPatchEnterEvent) {
+                    mScrollListener.onEnter(enterIndex, mTotalCount, enterPerent, isLeftToRight);
+                    mLeavePercents.put(enterIndex, 1.0f - enterIndex);
                 }
             }
+
             if (mLeavePercents.get(leaveIndex, 0.0f) != leavePercent) {
                 if (isLeftToRight && leaveIndex == getSafeIndex(mCurrentIndex) && leavePercent == 0.0f) {
-                    boolean dispatchEnterEvent = mScrollState ==
-                            ViewPager.SCROLL_STATE_DRAGGING || leaveIndex == mCurrentIndex;
-                    if (dispatchEnterEvent) {
+                    boolean disPatchEnterEvent = mScrollState == ViewPager.SCROLL_STATE_DRAGGING || leaveIndex == mCurrentIndex;
+                    if (disPatchEnterEvent) {
                         mScrollListener.onEnter(leaveIndex, mTotalCount, 1.0f, true);
                         mLeavePercents.put(leaveIndex, 0.0f);
                     }
                 } else {
-                    boolean dispatchLeaveEvent = mScrollState ==
-                            ViewPager.SCROLL_STATE_DRAGGING || leaveIndex == mLaseIndex
-                            || (leaveIndex == mCurrentIndex - 1) && mLeavePercents.get(leaveIndex, 0.0f) != 1.0f
-                            || (leaveIndex == mCurrentIndex + 1) && mLeavePercents.get(leaveIndex, 0.0f) != 1.0f;
-                    if (dispatchLeaveEvent) {
+                    boolean disPatchLeaveEvent = mScrollState == ViewPager.SCROLL_STATE_DRAGGING
+                            || leaveIndex == mLastIndex
+                            || (leaveIndex == mCurrentIndex -1) && mLeavePercents.get(leaveIndex, 0.0f) != 1.0f
+                            || (leaveIndex == mCurrentIndex +1) && mLeavePercents.get(leaveIndex, 0.0f) != 1.0f;
+                    if (disPatchLeaveEvent) {
                         mScrollListener.onLeave(leaveIndex, mTotalCount, leavePercent, isLeftToRight);
                     }
                 }
             }
-            //滚动状态时
-        } else {
-            for (int i = 0; i < mTotalCount; i++) {
+        }
+        //滚动状态时
+        else {
+            for (int i =0; i < mTotalCount; i++) {
                 if (i == mCurrentIndex) {
                     continue;
                 }
-                boolean disSelected = mDisSelectedItems.get(i);
-                if (!disSelected) {
+                boolean deSelected = mDeSelectedItems.get(i);
+                if (!deSelected) {
                     mScrollListener.onDisSelected(i, mTotalCount);
-                    Float leavePercent = mLeavePercents.get(i, 0.0f);
-                    if (leavePercent != 1.0f) {
-                        mScrollListener.onLeave(i, mTotalCount, 1.0f, isLeftToRight);
-                        mLeavePercents.put(i, 1.0f);
-                    }
                 }
-                mScrollListener.onEnter(mCurrentIndex, mTotalCount, 1.0f, false);
-                mLeavePercents.put(mCurrentIndex, 0.0f);
-                mScrollListener.onSelected(mCurrentIndex, mTotalCount);
-                mDisSelectedItems.put(mCurrentIndex, false);
+                Float leavedPercent = mLeavePercents.get(i, 0.0f);
+                if (leavedPercent != 1.0f) {
+                    mScrollListener.onLeave(i, mTotalCount, 1.0f, isLeftToRight);
+                    mLeavePercents.put(i, 1.0f);
+                }
             }
-            mLastPositionOffsetSum = currentPositionOffsetSum;
+            mScrollListener.onEnter(mCurrentIndex, mTotalCount, 1.0f, false);
+            mLeavePercents.put(mCurrentIndex, 0.0f);
+            mScrollListener.onSelected(mCurrentIndex, mTotalCount);
+            mDeSelectedItems.put(mCurrentIndex, false);
         }
-    }
-
-    private int getSafeIndex(int position) {
-        return Math.max(Math.min(position, mTotalCount - 1), 0);
+        mLastPositionOffsetSum = currentPositionOffsetSum;
 
     }
 
-    public void onPagerSelected(int position) {
+    public int getSafeIndex(int position) {
+        return  Math.max(Math.min(position, mTotalCount - 1), 0);
+    }
+
+    public void onPageSelected(int position) {
         int currentIndex = setCurrentIndex(position);
         if (mScrollListener != null) {
-            mScrollListener.onSelected(currentIndex, mTotalCount);
-            mDisSelectedItems.put(mCurrentIndex, false);
+            mScrollListener.onSelected(mCurrentIndex, mTotalCount);
+            mDeSelectedItems.put(mCurrentIndex, false);
             for (int i = 0, j = mTotalCount; i < j; i++) {
                 if (i == mCurrentIndex) {
                     continue;
                 }
-                boolean disSelected = mDisSelectedItems.get(i);
+                boolean disSelected = mDeSelectedItems.get(i);
                 if (!disSelected) {
                     mScrollListener.onDisSelected(i, mTotalCount);
-                    mDisSelectedItems.put(i, true);
+                    mDeSelectedItems.put(i, true);
                 }
             }
         }
     }
 
-    public void onPagerScrollStateChange(int scrollState) {
+    public void onPageScrollStateChanged(int scrollState) {
         mScrollState = scrollState;
+    }
+
+    public int setCurrentIndex(int index) {
+        mLastIndex = mCurrentIndex;
+        mCurrentIndex = getSafeIndex(index);//重新赋值
+        return mCurrentIndex;
+    }
+
+    public int getCurrentIndex() {
+        return mCurrentIndex;
     }
 
     public void setTotalCount(int totalCount) {
         mTotalCount = totalCount;
-
     }
 
     public int getScrollState() {
@@ -155,14 +163,7 @@ public class ViewPagerIndicatorHelper {
     }
 
     public int getTotalCount() {
-
         return mTotalCount;
     }
 
-    private int setCurrentIndex(int index) {
-        mLaseIndex = mCurrentIndex;
-        //重新赋值
-        mCurrentIndex = getSafeIndex(index);
-        return mCurrentIndex;
-    }
 }
